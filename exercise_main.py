@@ -20,7 +20,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
 if args['video_source'] is not None:
-    cap = cv2.VideoCapture('Exercise_videos/' + args['video_source'])
+    cap = cv2.VideoCapture('./Validation/' + args['video_source'])
 else:
     cap = cv2.VideoCapture(0)
 
@@ -34,8 +34,9 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
     status = True
     while cap.isOpened():
         ret, frame = cap.read()
-        frame = cv2.resize(frame, (800, 480), interpolation=cv2.INTER_AREA)
+        frame = cv2.resize(frame, (800, 480), interpolation=cv2.INTER_LANCZOS4)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.flip(frame, 1)
         frame.flags.writeable = False
 
         results = pose.process(frame)
@@ -60,6 +61,8 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
 
         cv2.imshow('Video', frame)
         if cv2.waitKey(10) & 0xFF == ord('q'):
+            print(counter)
             break
+
     cap.release()
     cv2.destroyAllWindows()
