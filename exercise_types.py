@@ -54,6 +54,17 @@ class TypeOfExercise(BodyPartAngle):
 
         return [counter, status]
 
+    def sit_up(self, counter, status):
+        abs_angle = self.angle_of_the_abs()
+        if status:
+            if abs_angle < 55:
+                counter += 1
+                status = False
+        else:
+            if abs_angle > 105:
+                status = True
+        return [counter, status]
+
     def calculate_exercise(self, exercise_type, counter, status):
         if exercise_type == 'push-up':
             counter, status = TypeOfExercise(
@@ -64,4 +75,7 @@ class TypeOfExercise(BodyPartAngle):
         elif exercise_type == 'squat':
             counter, status = TypeOfExercise(
                 self.landmarks).squat(counter, status)
+        elif exercise_type == 'sit-up':
+            counter, status = TypeOfExercise(
+                self.landmarks).sit_up(counter, status)
         return [counter, status]
